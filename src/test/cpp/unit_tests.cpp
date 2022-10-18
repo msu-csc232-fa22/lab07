@@ -151,13 +151,13 @@ namespace csc232
         EXPECT_STREQ( expectedName.c_str( ), actualName.c_str( ) );
     }
 
-    TEST_F( Task2TestFixture, DISABLED_SmartRefactorIsSuccessful )
-    {
-        const std::string& name{ "CSC232" };
-        auto const& expected{ name };
-        auto actual{ csc232::plainFunctionSmartShared( name ) };
-        EXPECT_STREQ( expected.c_str( ), actual.c_str( ) );
-    }
+//    TEST_F( Task2TestFixture, DISABLED_SmartRefactorIsSuccessful )
+//    {
+//        const std::string& name{ "CSC232" };
+//        auto const& expected{ name };
+//        auto actual{ csc232::plainFunctionSmartShared( name ) };
+//        EXPECT_STREQ( expected.c_str( ), actual.c_str( ) );
+//    }
 
     TEST_F( Task2TestFixture, TransferOwnershipIsSuccessful )
     {
