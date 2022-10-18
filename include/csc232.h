@@ -17,7 +17,8 @@
 #define FALSE 0
 #define TRUE 1
 
-#define EXECUTE_PREAMBLE FALSE
+#define IS_WORKING_ON_TASK2 FALSE
+#define IS_WORKING_ON_TASK3 FALSE
 
 #define TEST_TASK1 FALSE
 #define TEST_TASK2 FALSE
@@ -64,10 +65,24 @@ using std::setw;
 namespace csc232
 {
     // Add any user-defined functions prescribed in your assignment below
+#if IS_WORKING_ON_TASK2
+    auto transferOwnership( const std::string& item )
+    {
+        auto ptr1 = std::make_unique<PlainBox<std::string>>( item );
+        std::unique_ptr<PlainBox<std::string>> ptr2;
+         ptr2 = ptr1;
+        // TODO: After discovering the error; transfer ownership of ptr1 to ptr2 using std::move
+        return ptr2;
+    }
+
+    auto changeBoxItem(std::unique_ptr<PlainBox<double>> theBox, double item )
+    {
+        theBox->setItem( item );
+        return theBox;
+    }
+#endif
 
     // DO NOT Modify anything below this line
-
-    int Preamble(int argc, char* argv[]);
 
     /**
      * @brief Generate a quasi-random UUID.

@@ -15,9 +15,9 @@
  */
 namespace csc232
 {
-    static int possiblePoints { 0 };
-    static int earnedPoints { 0 };
-    static const int MAX_CORRECTNESS_PTS { 3 };
+    static int possiblePoints;
+    static int earnedPoints;
+    static const int MAX_CORRECTNESS_PTS { 2 };
 
     /**
      * @brief Base test fixture that sets up grading for this assignment.
@@ -64,38 +64,129 @@ namespace csc232
         // Reusable objects for each unit test in this test fixture and any of its children
         std::stringstream buffer { };
         std::streambuf* sbuf;
-        /*
-         * With the above in place, you can now have tests on output statements 
-         * like this:
-         * 
-         * <some function call or executable that inserts info into output stream...>
-         * const std::string expected{ "1/1/1902\n" }; // what you expect to have been inserted
-         * const std::string actual{ buffer.str( ) };  // what was actually inserted
-         * EXPECT_EQ( expected, actual );
-         */
     };
 
-    TEST_F( CSC232BaseTestFixture, DISABLED_TestExpectedOutput )
+#if TEST_TASK1
+    class Task1TestFixture : public CSC232BaseTestFixture
     {
-        std::cout << "Google Test" << std::endl;
-        const std::string expected { "Google Test\n" };
-        const std::string actual { buffer.str( ) };
+    };
+
+    TEST_F( Task1TestFixture, DefaultNodeNextPtrIsNullPtr )
+    {
+        Node<int> node;
+        auto actual{ node.getNext( ) };
+        auto expected{ nullptr };
+
+        EXPECT_EQ( expected, actual );
+    }
+
+    TEST_F( Task1TestFixture, DefaultNodeItemIsDefaultItemTypeValue )
+    {
+        Node<int> node;
+        auto actual{ node.getItem( ) };
+        auto expected{ int{ } };
+
+        EXPECT_EQ( expected, actual );
+    }
+
+    TEST_F( Task1TestFixture, PartiallyInitializedNodeNextPtrIsNullPtr )
+    {
+        Node<int> node{ 5 };
+        auto actual{ node.getNext( ) };
+        auto expected{ nullptr };
+
+        EXPECT_EQ( expected, actual );
+    }
+
+    TEST_F( Task1TestFixture, PartiallyInitializedNodeItemIsGivenItemTypeValue )
+    {
+        Node<int> node{ 5 };
+        auto actual{ node.getItem( ) };
+        auto expected{ 5 };
+
+        EXPECT_EQ( expected, actual );
+    }
+
+    TEST_F( Task1TestFixture, FullyInitializedNodeNextPtrIsValid )
+    {
+        Node<int> defNode{ 5 };
+        auto actual{ defNode.getNext( ) };
+        auto expected{ nullptr };
+
+        EXPECT_EQ( expected, actual );
+    }
+
+    TEST_F( Task1TestFixture, FullyInitializedNodeItemIsGivenItemTypeValue )
+    {
+        auto tailNode{ std::shared_ptr<Node<int>>{ }};
+        Node<int> defNode{ 5, tailNode };
+        auto actual{ defNode.getNext( ) };
+        auto expected{ tailNode };
+
+        EXPECT_EQ( expected, actual );
+    }
+#endif
+
+#if TEST_TASK2
+    class Task2TestFixture : public CSC232BaseTestFixture
+    {
+
+    };
+
+    TEST_F( Task2TestFixture, DISABLED_DefaultPlainBoxHasDefaultItemTypeValue )
+    {
+        PlainBox<double> numberBox;
+        auto expectedNumber{ double{ } };
+        auto actualNumber{ numberBox.getItem( ) };
+        
+        EXPECT_EQ( expectedNumber, actualNumber );
+    }
+
+    TEST_F( Task2TestFixture, DISABLED_InitializedPlainBoxHasInitialItemTypeValue )
+    {
+        std::string name{ "CSC232" };
+        PlainBox<std::string> nameBox{ name };
+        auto const& expectedName{ name };
+        auto const& actualName{ nameBox.getItem( ) };
+        EXPECT_STREQ( expectedName.c_str( ), actualName.c_str( ) );
+    }
+
+    TEST_F( Task2TestFixture, DISABLED_SmartRefactorIsSuccessful )
+    {
+        const std::string& name{ "CSC232" };
+        auto const& expected{ name };
+        auto actual{ csc232::plainFunctionSmartShared( name ) };
         EXPECT_STREQ( expected.c_str( ), actual.c_str( ) );
     }
 
-    // Extend the base test fixture as needed for various components under test...
-    class DISABLED_CSC232ChildClassTestFixture : public CSC232BaseTestFixture
+    TEST_F( Task2TestFixture, TransferOwnershipIsSuccessful )
     {
-    protected:
-        // Reusable objects for each unit test in this test fixture
-    };
-
-    TEST_F( DISABLED_CSC232ChildClassTestFixture, ValidateFailedAssertionTest )
-    {
-        EXPECT_DEATH( {
-            assert( false ); // some line(s) of code that will cause a failed assertion
-        }, ".*failed.*" );
+        const std::string& expectedName{ "CSC232" };
+        auto ptr = std::make_unique<PlainBox<std::string>>( expectedName );
+        auto actualName{ csc232::transferOwnership( expectedName )->getItem( ) };
+        EXPECT_STREQ( expectedName.c_str( ), actualName.c_str( ) );
     }
+
+    TEST_F( Task2TestFixture, MoveArgumentIsSuccessful )
+    {
+        double initialValue{ 3.14159 };
+        double expectedValue{ 2 * initialValue };
+        auto ptr = std::make_unique<PlainBox<double>>( initialValue );
+        ptr = csc232::changeBoxItem( std::move(ptr), initialValue * 2 );
+        auto actualValue = ptr->getItem();
+        EXPECT_DOUBLE_EQ( expectedValue, actualValue );
+    }
+
+#endif
+
+#if TEST_TASK3
+    class Task3TestFixture : public CSC232BaseTestFixture
+    {
+
+    };
+    
+#endif
+
 } // end namespace
 
 int main ( int argc, char** argv )

@@ -1,6 +1,10 @@
-cmake_minimum_required(VERSION 3.16.3-3.22.1)
-# TODO: Search and replace labhwn with appropriate values in this file
-project(labhwn)
+cmake_minimum_required(VERSION 3.16.3-3.24.2)
+# TODO: Search and replace lab07-solution with appropriate values in this file
+project(lab07-solution)
+
+if (CMAKE_VERSION GREATER_EQUAL "3.24.0")
+    cmake_policy(SET CMP0135 NEW)
+endif()
 
 # Set compiler flags based on environment
 if (MSVC)

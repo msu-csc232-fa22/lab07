@@ -1,5 +1,5 @@
 /**
-* @file demo.cxx
+* @file demo.cpp
 * @author Jim Daehn (jdaehn@missouristate.edu)
 * @brief Entry-point of the demo target.
 * @version 0.1.1
@@ -11,51 +11,39 @@
 
 #include "csc232.h"
 
-int main(int argc, char* argv[])
+template<typename ItemType>
+auto getReferenceCount( std::shared_ptr<PlainBox<ItemType>> sharedPtr1 )
 {
-	std::cout << "Hello, Demo Target!" << std::endl;
+	auto sharedPtr2 = sharedPtr1;
+	auto sharedPtr3 = sharedPtr1;
+	std::weak_ptr<PlainBox<ItemType>> weakPtr1 = sharedPtr1;
+	auto weakPtr2 = weakPtr1;
+	long use_count = sharedPtr1.use_count();
 
-#if EXECUTE_PREAMBLE
-	return csc232::Preamble(argc, argv);
-#endif
-
-	return EXIT_SUCCESS;
+	std::cout << "sharedPtr1.use_count() = " << use_count << std::endl;
+	return use_count;
 }
 
-int csc232::Preamble(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
-	// An input file to process
-	std::string input_file;
 
-	// Check to see if the user has supplied a specific input file for consumption
-	if (argc > 1)
-	{
-		// It is expected as the first argument
-		input_file = argv[1];
-	}
-	else
-	{
-		// Default input file
-		input_file = "demo_data.txt";
-	}
+#if IS_WORKING_ON_TASK2
+	const std::string& expectedName{ "CSC232" };
+	auto strPtr = std::make_unique<PlainBox<std::string>>( expectedName );
+	auto actualName{ csc232::transferOwnership( expectedName )->getItem( ) };
 
-	// Open the file for reading
-	std::ifstream data_file{ input_file, std::ios::in };
+	double initialValue{ 3.1459 };
+	auto dblPtr = std::make_unique<PlainBox<double>>( initialValue );
+	// TODO: Move the first argument instead of passing by value
+	 dblPtr = csc232::changeBoxItem( dblPtr, initialValue * 2 );
+#endif
 
-	if (!data_file)
-	{
-		std::cout << "Could not open \"" << input_file << "\"" << std::endl;
-		return EXIT_FAILURE;
-	}
-	else
-	{
-		std::cout << "Successfully opened \"" << input_file << "\"";
+#if IS_WORKING_ON_TASK3
+	auto ptr = std::make_shared<PlainBox<double>>( );
+	auto count = getReferenceCount( ptr );
+	std::cout << "\ncount (calling function) = " << count << std::endl;
+	std::cout << "count (ptr)              = " << ptr.use_count() << std::endl;
+#endif
 
-		std::cout << "... will now close this file" << std::endl;
-		if (data_file.is_open())
-		{
-			data_file.close();
-		}
-	}
 	return EXIT_SUCCESS;
 }

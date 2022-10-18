@@ -11,49 +11,19 @@
 
 #include "csc232.h"
 
-int main(int argc, char* argv[])
-{
-
-
-	return EXIT_SUCCESS;
-}
-
-int csc232::Preamble(int argc, char* argv[])
+int main( )
 {
 	std::cout << "Hello, Main Target!" << std::endl;
-	// An input file to process
-	std::string input_file;
 
-	// Check to see if the user has supplied a specific input file for consumption
-	if (argc > 1)
-	{
-		// It is expected as the first argument
-		input_file = argv[1];
-	}
-	else
-	{
-		// Default input file
-		input_file = "main_data.txt";
-	}
+	Node<int> aDefaultNode{ };
+	Node<int> aPartiallyInitializedNode{ 5 };
+	Node<int> aFullyInitializedNode{ 6, &aDefaultNode };
 
-	// Open the file for reading
-	std::ifstream data_file{ input_file, std::ios::in };
+	std::cout << "Default node item: " << aDefaultNode.getItem( ) << "\n";
+	std::cout << "A partially initialized node item: " << aPartiallyInitializedNode.getItem( ) << "\n";
+	std::cout << "A fully initialized node item: " << aFullyInitializedNode.getItem( ) << "\n";
 
-	if (!data_file)
-	{
-		std::cout << "Could not open \"" << input_file << "\"" << std::endl;
-		return EXIT_FAILURE;
-	}
-	else
-	{
-		std::cout << "Successfully opened \"" << input_file << "\"";
-
-		std::cout << "... will now close this file" << std::endl;
-		if (data_file.is_open())
-		{
-			data_file.close();
-		}
-	}
+	aPartiallyInitializedNode.setNext( &aFullyInitializedNode );
 
 	return EXIT_SUCCESS;
 }
